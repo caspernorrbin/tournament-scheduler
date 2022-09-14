@@ -1,7 +1,5 @@
 from random import shuffle
 
-from numpy import number
-
 MatchList = list[tuple[int, int]]
 
 
