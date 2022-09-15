@@ -1,4 +1,5 @@
 from random import shuffle
+from itertools import combinations
 
 MatchList = list[tuple[int, int]]
 
@@ -11,11 +12,7 @@ def match_order(players: list[int]) -> MatchList:
     :param players: list of players that should play matches
     :return: list of unique random player combinations
     """
-    match_list = []
-    for p1 in players:
-        for p2 in players:
-            if (p1 != p2 and ((p1, p2) not in (match_list)) and ((p2, p1) not in (match_list))):
-                match_list.append((p1, p2))
+    match_list = list(combinations(players,2))
     shuffle(match_list)
 
     return match_list
@@ -41,8 +38,5 @@ def test_all_play_all():
         # compare generated number of matches to theoretical number of matches
         assert len(match_list) == number_of_players*(number_of_players-1)/2
 
-
 test_no_duplicate_matches()
 test_all_play_all()
-
-print(match_order(range(3)))
