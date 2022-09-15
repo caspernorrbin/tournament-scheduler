@@ -13,6 +13,7 @@ def select_player(players):
             print("Invalid selection")
 
 ## Takes a list of players and the players of the upcoming match.
+## Prints the players of the upcoming match.
 ## Returns a list of players who want to quit before the upcoming match.
 def between_matches(players, player1, player2):
     quitters = []
