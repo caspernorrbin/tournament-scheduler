@@ -8,6 +8,9 @@ class Player:
         self.name = name
         self.player_id = player_id
         self.score = 0
+        self.active = True
+        self.whiteplays = 0
+        self.blackplays = 0
 
 
 class Tournament:
