@@ -16,6 +16,12 @@ class Color(Enum):
     WHITE = 1
 
 
+@dataclass
+class Piece:
+    orientation: Orientation
+    color: Color
+
+
 @dataclass(init=False)
 class Board:
     """Data structure for representing a board. Currently implemented as a dict 
@@ -30,7 +36,7 @@ class Board:
 
     board: defaultdict[tuple: list]
 
-    def __init__(self, width, height) -> None:
+    def __init__(self, width: int, height :int) -> None:
         """TODO: If board input takes care of checking for valid sizes, the
         checks here become unneccesary. It is currently impossible to construct
         a board of an invalid size."""
@@ -50,3 +56,13 @@ class Board:
     @property
     def size(self):
         return (self.width, self.height)
+
+
+    def add_piece(self, piece: Piece, coordinate: tuple[int, int]) -> None:
+        location = self.board[coordinate]
+        
+        # If the top piece is vertical we cannot place a piece there.
+        if location and location[0].orientation == Orientation.VERTICAL:
+            return
+        
+        self.board[location].push(piece)
