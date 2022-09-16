@@ -1,4 +1,3 @@
-from ast import main
 import unittest as ut
 import game_state
 
