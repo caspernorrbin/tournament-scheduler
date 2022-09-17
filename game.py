@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 
+
 @dataclass
 class Player:
     """
@@ -12,17 +13,20 @@ class Player:
     score: int = field(default=0, init=False)
     active: bool = field(default=True, init=False)
     whiteplays: int = field(default=0, init=False)
-    blackplays: int = field(default = 0, init=False)
-    
+    blackplays: int = field(default=0, init=False)
+
     def __str__(self):
-        return self.name
-    
+        return f"{self.name}: {self.score}"
+
+    def __lt__(self, other):
+        return self.score < other.score
 
 
 class Tournament:
     """
     Represents a tournament.
     """
+
     def __init__(self, player_list):
         self.player_list = player_list
 
@@ -30,11 +34,10 @@ class Tournament:
         """
         prints the leaderboard
         """
-        tuple_list = [(player.name, player.score) for player in self.player_list]
-        tuple_list.sort(key=lambda tup: tup[1], reverse=True)
+        self.player_list.sort(reverse=True)
         print("Leaderboard\n-----------------------")
-        for element in tuple_list:
-            print(f"{element[0]}: {element[1]}")
+        for player in self.player_list:
+            print(player)
 
     # NB: we don't know in what kind of format the game component outputs
     # the score after each match, right now we assume winner_id
@@ -50,22 +53,16 @@ class Tournament:
     def check_for_tiebreak(self):
         """
         check if there is a tiebreak
-        :return: list of players with the same (highest) score if more than one player, else return False
+        :return: list of players with the same (highest) score if more than one player, else return empty list
         """
-        tuple_list = [(player.name, player.score, player.player_id) for player in self.player_list]
-        tuple_list.sort(key=lambda tup: tup[1], reverse=True)
+        self.player_list.sort(reverse=True)
+
         tiebreak_list = []
-
-        for i in range(len(tuple_list)):
-            if tuple_list[0][1] == tuple_list[i][1]:
-                tiebreak_list.append(tuple_list[i][2])
-        if len(tiebreak_list) > 1:
-            return tiebreak_list
-
-        else:
-            return False
-
-
+        for player in self.player_list:
+            if player.score < self.player_list[0].score:
+                break
+            tiebreak_list.append(player)
+        return tiebreak_list if len(tiebreak_list) > 1 else []
 
 
 def startmenu():
@@ -83,29 +80,27 @@ def game():
     print("Game")
 
 
-
-def get_player_names():
+def number_of_players():
     """
     asks user to input how many players will be playing, and the names of the players
     :return: list of player names
     """
-    how_many = input("How many players are playing today? ")
-    if how_many.isdigit():
-        how_many = int(how_many)
-        if 3 <= how_many <= 8:
-            name_list = []
-            for name in range(how_many):
-                next_name = input(f"Please type in player {name+1}'s name! ")
-                name_list.append(next_name)
+    answer = ""
+    while True:
+        answer = input("How many players are playing today? ")
+        if answer.isdigit():
+            answer = int(answer)
+            if 3 <= answer <= 8:
+                break
+            else:
+                print("Please type in a number between 3 and 8")
 
-            return name_list
-        else:
-            print("Please type in a number between 3 and 8")
-            return get_player_names()
+    answer = int(answer)
 
-    else:
-        print("Please type in a number! ")
-        return get_player_names()
+    player_list = []
+    for i in range(answer):
+        player_list.append(input(f"Please type in player {i+1}'s name! "))
+    return player_list
 
 
 def tournament():
