@@ -1,16 +1,22 @@
+from dataclasses import dataclass, field
+
+@dataclass
 class Player:
     """
     This class scores a player's name, their id and their score.
     :param name: name of the player
     :param player_id: player_id of the player
     """
-    def __init__(self, name, player_id):
-        self.name = name
-        self.player_id = player_id
-        self.score = 0
-        self.active = True
-        self.whiteplays = 0
-        self.blackplays = 0
+    name: str
+    player_id: int
+    score: int = field(default=0, init=False)
+    active: bool = field(default=True, init=False)
+    whiteplays: int = field(default=0, init=False)
+    blackplays: int = field(default = 0, init=False)
+    
+    def __str__(self):
+        return self.name
+    
 
 
 class Tournament:
