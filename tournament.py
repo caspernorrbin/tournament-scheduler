@@ -73,7 +73,7 @@ class Tournament:
         """
         self.initialize_players()
         self.match_order = match_order(self.player_list)
-        [print(player) for player in self.match_order]
+
         # TODO: Start the first match
 
     def end_tournament(self):
