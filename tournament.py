@@ -27,16 +27,17 @@ class Tournament:
     Represents a tournament.
     """
 
-    def __init__(self, player_list):
-        self.player_list = player_list
+    def __init__(self):
+        self.player_list = []
 
     def leaderboard(self):
         """
         prints the leaderboard
         """
-        self.player_list.sort(reverse=True)
+        sorted = self.player_list.copy()
+        sorted.sort(reverse=True)
         print("Leaderboard\n-----------------------")
-        for player in self.player_list:
+        for player in sorted:
             print(player)
 
     # NB: we don't know in what kind of format the game component outputs
@@ -46,20 +47,40 @@ class Tournament:
         updates the leaderboard
         :param winner_id: the id of the player who one the last match
         """
-        for player in self.player_list:
-            if player.player_id == winner_id:
-                player.score += 1
+        if 0 <= winner_id < len(self.player_list):
+            self.player_list[winner_id].score += 1
 
     def check_for_tiebreak(self):
         """
         check if there is a tiebreak
         :return: list of players with the same (highest) score if more than one player, else return empty list
         """
-        self.player_list.sort(reverse=True)
+        sorted = self.player_list.copy()
+        sorted.sort(reverse=True)
 
         tiebreak_list = []
-        for player in self.player_list:
-            if player.score < self.player_list[0].score:
+        for player in sorted:
+            if player.score < sorted[0].score:
                 break
             tiebreak_list.append(player)
         return tiebreak_list if len(tiebreak_list) > 1 else []
+    
+    def initialize_players(self):
+        """
+        asks user to input how many players will be playing, and the names of the players
+        saves the players in the tournament
+        """
+        answer = ""
+        while True:
+            answer = input("How many players are playing today? ")
+            if answer.isdigit():
+                answer = int(answer)
+                if 3 <= answer <= 8:
+                    break
+                else:
+                    print("Please type in a number between 3 and 8")
+
+        self.player_list = []
+        for i in range(answer):
+            name = input(f"Please type in player {i+1}'s name! ")
+            self.player_list.append(Player(name, i))

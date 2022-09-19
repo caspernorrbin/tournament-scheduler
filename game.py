@@ -15,29 +15,6 @@ def game():
     print("Game")
 
 
-def number_of_players():
-    """
-    asks user to input how many players will be playing, and the names of the players
-    :return: list of player names
-    """
-    answer = ""
-    while True:
-        answer = input("How many players are playing today? ")
-        if answer.isdigit():
-            answer = int(answer)
-            if 3 <= answer <= 8:
-                break
-            else:
-                print("Please type in a number between 3 and 8")
-
-    answer = int(answer)
-
-    player_list = []
-    for i in range(answer):
-        player_list.append(input(f"Please type in player {i+1}'s name! "))
-    return player_list
-
-
 def tournament():
     print("Tournament")
 
