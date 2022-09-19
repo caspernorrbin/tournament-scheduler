@@ -1,5 +1,8 @@
-from round_robin import match_order
+from random import shuffle
+from itertools import combinations
 from player import Player
+
+MatchList = list[tuple[Player, Player]]
 
 
 class Tournament:
@@ -10,7 +13,6 @@ class Tournament:
     def __init__(self):
         self.player_list = []
         self.match_order = []
-        self.initialize_tournament()
 
     def leaderboard(self):
         """
@@ -32,7 +34,7 @@ class Tournament:
         if 0 <= winner_id < len(self.player_list):
             self.player_list[winner_id].score += 1
 
-    def check_for_tiebreak(self):
+    def tiebreak_player_list(self):
         """
         check if there is a tiebreak
         :return: list of players with the same (highest) score if more than one player, else return empty list
@@ -47,7 +49,16 @@ class Tournament:
             tiebreak_list.append(player)
         return tiebreak_list if len(tiebreak_list) > 1 else []
 
-    def initialize_players(self):
+    def generate_match_order(self, players: list[Player]) -> MatchList:
+        """
+        Generates a random combination of matches based on given list of players
+        """
+        match_list = list(combinations(players, 2))
+        shuffle(match_list)
+
+        return match_list
+
+    def register_players(self) -> list[Player]:
         """
         asks user to input how many players will be playing, and the names of the players
         saves the players in the tournament
@@ -67,12 +78,12 @@ class Tournament:
             name = input(f"Please type in player {i+1}'s name! ")
             self.player_list.append(Player(name, i))
 
-    def initialize_tournament(self):
+    def begin_tournament(self):
         """
         Starts tournament, sets players and match order
         """
-        self.initialize_players()
-        self.match_order = match_order(self.player_list)
+        self.register_players()
+        self.match_order = self.generate_match_order(self.player_list)
 
         # TODO: Start the first match
 
@@ -95,6 +106,6 @@ class Tournament:
 
         # TODO: Check if any player wants to quit, update tiebreak_list accordingly
 
-        self.match_order = match_order(tiebreak_list)
+        self.match_order = self.generate_match_order(tiebreak_list)
 
         # TODO: Start next match, pop match from match list

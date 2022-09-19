@@ -18,6 +18,7 @@ def game():
 
 def tournament():
     tournament = Tournament()
+    tournament.begin_tournament()
 
 
 def main():
