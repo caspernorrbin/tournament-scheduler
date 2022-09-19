@@ -1,3 +1,5 @@
+from tournament import Tournament, Player
+
 def startmenu():
     print('''Welcome to the game!
 [S]tart game]
