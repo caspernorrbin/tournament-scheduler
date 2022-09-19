@@ -1,4 +1,3 @@
-## Takes a list of players and returns a selected player or None if selection is cancelled
 def select_player(players):
     options = ["[Go back]", *players]
     while True:
@@ -32,35 +31,6 @@ def between_matches(players, player1, player2):
             if quitter == player1 or quitter == player2:
                 return quitters
 
-def startmenu():
-    print('''Welcome to the game!
-[S]tart game]
-[T]ournament]
-[Q]uit]''')
-    choice = ""
-    while choice not in ["S", "T", "Q"]:
-        choice = input("Option: ").upper()
-    return choice
-
-
-def game():
-    print("Game")
-
-
-def tournament():
-    print("Tournament")
-
-
-def main():
-    a = startmenu()
-
-    if a == "S":
-        game()
-    elif a == "T":
-        tournament()
-    elif a == "Q":
-        quit()
-
-
-if __name__ == "__main__":
-    main()
+while True:
+    a = between_matches(["a", "b", "c"], "a", "b")
+    print(a)
