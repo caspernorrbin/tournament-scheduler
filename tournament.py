@@ -1,5 +1,6 @@
 from random import shuffle
 from itertools import combinations
+from game import select_player
 from player import Player
 
 MatchList = list[tuple[Player, Player]]
@@ -109,3 +110,23 @@ class Tournament:
         self.match_order = self.generate_match_order(tiebreak_list)
 
         # TODO: Start next match, pop match from match list
+
+        ## Prints the players of the upcoming match.
+        ## Creates a list of players who want to quit before the upcoming match.    
+        (player1, player2) = self.match_order[0]
+        players = self.player_list
+        quitters = []
+        while True:
+            print(f"Next match: {player1} vs {player2}")
+            print("1. Continue")
+            print("2. A player wants to quit")
+            selection = input("Selection: ")
+            if selection == "1":
+                break
+            elif selection == "2":
+                quitter = select_player(players)
+                if quitter != None:
+                    quitters.append(quitter)
+                if quitter == player1 or quitter == player2:
+                    break
+        #TODO: Remove quitters from match_order and player_list
