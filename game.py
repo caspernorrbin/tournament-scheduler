@@ -1,3 +1,4 @@
+from tournament import Tournament, Player
 ## Takes a list of players and returns a selected player or None if selection is cancelled
 def select_player(players):
     options = ["[Go back]", *players]
@@ -48,7 +49,8 @@ def game():
 
 
 def tournament():
-    print("Tournament")
+    tournament = Tournament()
+    tournament.begin_tournament()
 
 
 def main():
