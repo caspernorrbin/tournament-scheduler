@@ -1,25 +1,8 @@
-from dataclasses import dataclass, field
+from random import shuffle
+from itertools import combinations
+from player import Player
 
-
-@dataclass
-class Player:
-    """
-    This class scores a player's name, their id and their score.
-    :param name: name of the player
-    :param player_id: player_id of the player
-    """
-    name: str
-    player_id: int
-    score: int = field(default=0, init=False)
-    active: bool = field(default=True, init=False)
-    whiteplays: int = field(default=0, init=False)
-    blackplays: int = field(default=0, init=False)
-
-    def __str__(self):
-        return f"{self.name}: {self.score}"
-
-    def __lt__(self, other):
-        return self.score < other.score
+MatchList = list[tuple[Player, Player]]
 
 
 class Tournament:
@@ -29,6 +12,7 @@ class Tournament:
 
     def __init__(self):
         self.player_list = []
+        self.match_order = []
 
     def leaderboard(self):
         """
@@ -42,7 +26,7 @@ class Tournament:
 
     # NB: we don't know in what kind of format the game component outputs
     # the score after each match, right now we assume winner_id
-    def update_leaderboard(self, winner_id):
+    def update_leaderboard(self, winner_id: int):
         """
         updates the leaderboard
         :param winner_id: the id of the player who one the last match
@@ -50,7 +34,7 @@ class Tournament:
         if 0 <= winner_id < len(self.player_list):
             self.player_list[winner_id].score += 1
 
-    def check_for_tiebreak(self):
+    def tiebreak_player_list(self):
         """
         check if there is a tiebreak
         :return: list of players with the same (highest) score if more than one player, else return empty list
@@ -64,8 +48,17 @@ class Tournament:
                 break
             tiebreak_list.append(player)
         return tiebreak_list if len(tiebreak_list) > 1 else []
-    
-    def initialize_players(self):
+
+    def generate_match_order(self, players: list[Player]) -> MatchList:
+        """
+        Generates a random combination of matches based on given list of players
+        """
+        match_list = list(combinations(players, 2))
+        shuffle(match_list)
+
+        return match_list
+
+    def register_players(self) -> list[Player]:
         """
         asks user to input how many players will be playing, and the names of the players
         saves the players in the tournament
@@ -84,3 +77,35 @@ class Tournament:
         for i in range(answer):
             name = input(f"Please type in player {i+1}'s name! ")
             self.player_list.append(Player(name, i))
+
+    def begin_tournament(self):
+        """
+        Starts tournament, sets players and match order
+        """
+        self.register_players()
+        self.match_order = self.generate_match_order(self.player_list)
+
+        # TODO: Start the first match
+
+    def end_tournament(self):
+        # TODO: Announce winner
+        return
+
+    def event_between_matches(self, winner_id: int):
+        """
+        Handles events between matches. 
+        Updates and prints leaderboard, checks for tiebreaks and generates new matches
+        """
+        # TODO: use self.update_leaderboard(winner_id) when winner_id is implemented/available
+        self.leaderboard()
+
+        if len(self.match_order) == 0:
+            tiebreak_list = self.check_for_tiebreak()
+            if len(tiebreak_list) == 0:
+                self.end_tournament()
+
+        # TODO: Check if any player wants to quit, update tiebreak_list accordingly
+
+        self.match_order = self.generate_match_order(tiebreak_list)
+
+        # TODO: Start next match, pop match from match list

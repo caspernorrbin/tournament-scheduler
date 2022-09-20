@@ -1,5 +1,6 @@
 from tournament import Tournament, Player
 
+
 def startmenu():
     print('''Welcome to the game!
 [S]tart game]
@@ -16,7 +17,8 @@ def game():
 
 
 def tournament():
-    print("Tournament")
+    tournament = Tournament()
+    tournament.begin_tournament()
 
 
 def main():
