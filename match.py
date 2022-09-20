@@ -11,7 +11,7 @@ def play_match(player1, player2):
     Simulates a match between two players
     :param Player1: the first player
     :param Player2: the second player
-    :return: 
+    :return: match result
     """
     print("Playing match...")
     print("Player 1: " + player1.name)
