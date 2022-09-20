@@ -14,12 +14,19 @@ class Tournament:
     def __init__(self):
         self.player_list = []
         self.match_order = []
+        self.quitter_list = []
+
+    def get_active_players(self) -> list[Player]:
+        """
+        Returns a list of players who have not quit yet
+        """
+        return [player for player in self.player_list if player not in self.quitter_list]
 
     def leaderboard(self):
         """
         prints the leaderboard
         """
-        sorted = self.player_list.copy()
+        sorted = self.get_active_players()
         sorted.sort(reverse=True)
         print("Leaderboard\n-----------------------")
         for player in sorted:
@@ -40,7 +47,7 @@ class Tournament:
         check if there is a tiebreak
         :return: list of players with the same (highest) score if more than one player, else return empty list
         """
-        sorted = self.player_list.copy()
+        sorted = self.get_active_players()
         sorted.sort(reverse=True)
 
         tiebreak_list = []
@@ -115,7 +122,6 @@ class Tournament:
         ## Creates a list of players who want to quit before the upcoming match.    
         (player1, player2) = self.match_order[0]
         players = self.player_list
-        quitters = []
         while True:
             print(f"Next match: {player1} vs {player2}")
             print("1. Continue")
@@ -126,7 +132,7 @@ class Tournament:
             elif selection == "2":
                 quitter = select_player(players)
                 if quitter != None:
-                    quitters.append(quitter)
+                    self.quitter_list.append(quitter)
                 if quitter == player1 or quitter == player2:
                     break
         #TODO: Remove quitters from match_order and player_list
