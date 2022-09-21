@@ -115,6 +115,7 @@ class Tournament:
         ## Creates a list of players who want to quit before the upcoming match.    
         (player1, player2) = self.match_order[0]
         players = self.player_list
+        quitters = []
         while True:
             print(f"Next match: {player1} vs {player2}")
             print("1. Continue")
@@ -125,7 +126,7 @@ class Tournament:
             elif selection == "2":
                 quitter = select_player(players)
                 if quitter != None:
-                    self.quitter_list.append(quitter)
+                    quitters.append(quitter)
                 if quitter == player1 or quitter == player2:
                     break
         #TODO: Remove quitters from match_order and player_list
