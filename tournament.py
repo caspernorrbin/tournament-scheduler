@@ -170,7 +170,6 @@ class Tournament:
             if player == player1:
                 del self.match_order[i]
                 self.update_leaderboard(player2.player_id)
-                print(player2.player_id)
             if player == player2:
                 del self.match_order[i]
                 self.update_leaderboard(player1.player_id)
