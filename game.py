@@ -1,17 +1,4 @@
-from tournament import Tournament, Player
-## Takes a list of players and returns a selected player or None if selection is cancelled
-def select_player(players):
-    options = ["[Go back]", *players]
-    while True:
-        for i in range(len(options)):
-            print(f"{i+1}. {options[i]}")
-        selection = input("Selection: ")
-        if selection == "1":
-            return None
-        elif selection.isdigit() and int(selection) <= len(options) and int(selection) > 0:
-            return players[int(selection)-1]
-        else:
-            print("Invalid selection")
+from tournament import Tournament
 
 def startmenu():
     print('''Welcome to the game!
