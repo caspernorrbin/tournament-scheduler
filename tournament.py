@@ -112,6 +112,7 @@ class Tournament:
                 self.end_tournament()
 
             self.match_order = self.generate_match_order(tiebreak_list)
+            self.active_players = len(tiebreak_list)
 
         self.play_match()
 
