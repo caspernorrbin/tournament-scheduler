@@ -14,19 +14,12 @@ class Tournament:
     def __init__(self):
         self.player_list = []
         self.match_order = []
-        self.quitter_list = []
-
-    def get_active_players(self) -> list[Player]:
-        """
-        Returns a list of players who have not quit yet
-        """
-        return [player for player in self.player_list if player not in self.quitter_list]
 
     def leaderboard(self):
         """
         prints the leaderboard
         """
-        sorted = self.get_active_players()
+        sorted = self.player_list.copy()
         sorted.sort(reverse=True)
         print("Leaderboard\n-----------------------")
         for player in sorted:
