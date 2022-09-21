@@ -118,23 +118,20 @@ class Tournament:
 
 
     def play_match(self):
-        match_players = self.match_order.pop()
-        if match_players[0].whiteplays < match_players[1].whiteplays:
-            result = play_match(match_players[0], match_players[1])
-        else:
-            result = play_match(match_players[1], match_players[0])
-        (player1, player2) = self.match_order.pop()
-        result = play_match(player1, player2)
-        if MatchResult.P1_WIN == result:
-            self.update_leaderboard(player1.player_id)
-        elif MatchResult.P2_WIN == result:
-            self.update_leaderboard(player2.player_id)
-        elif MatchResult.P1_QUIT == result:
-            self.player_quit(player1)
-            self.update_leaderboard(player2)
-        elif MatchResult.P2_QUIT == result:
-            self.player_quit(player2)
-            self.update_leaderboard(player1)
+        (white, black) = self.match_order.pop()
+        if white.whiteplays < black.whiteplays:
+            white, black = black, white
+        result = play_match(white, black)
+        if MatchResult.WHITE_WIN == result:
+            self.update_leaderboard(white.player_id)
+        elif MatchResult.BLACK_WIN == result:
+            self.update_leaderboard(black.player_id)
+        elif MatchResult.WHITE_QUIT == result:
+            self.player_quit(white)
+            self.update_leaderboard(black)
+        elif MatchResult.BLACK_QUIT == result:
+            self.player_quit(black)
+            self.update_leaderboard(white)
 
         self.event_between_matches()
 
