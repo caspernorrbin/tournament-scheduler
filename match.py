@@ -9,9 +9,9 @@ class MatchResult(Enum):
 def play_match(player1, player2):
     """
     Simulates a match between two players
-    :param Player1: the first player
-    :param Player2: the second player
-    :return: match result
+    :param player1: the first player
+    :param player2: the second player
+    :return: 
     """
     print("Playing match...")
     print("Player 1: " + player1.name)

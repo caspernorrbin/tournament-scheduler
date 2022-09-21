@@ -1,6 +1,8 @@
 from random import shuffle
 from itertools import combinations
+
 from player import Player
+from match import MatchResult, play_match
 
 MatchList = list[tuple[Player, Player]]
 
@@ -11,6 +13,7 @@ class Tournament:
     """
 
     def __init__(self):
+        self.active_players = 0
         self.player_list = []
         self.match_order = []
 
@@ -77,6 +80,7 @@ class Tournament:
         for i in range(answer):
             name = input(f"Please type in player {i+1}'s name! ")
             self.player_list.append(Player(name, i))
+        self.active_players = answer
 
     def begin_tournament(self):
         """
@@ -85,27 +89,63 @@ class Tournament:
         self.register_players()
         self.match_order = self.generate_match_order(self.player_list)
 
-        # TODO: Start the first match
+        self.play_match()
 
     def end_tournament(self):
         # TODO: Announce winner
-        return
+        quit()
 
-    def event_between_matches(self, winner_id: int):
+
+    def event_between_matches(self):
         """
         Handles events between matches. 
         Updates and prints leaderboard, checks for tiebreaks and generates new matches
         """
-        # TODO: use self.update_leaderboard(winner_id) when winner_id is implemented/available
+
         self.leaderboard()
 
+        # TODO: Check if any player wants to quit
+
         if len(self.match_order) == 0:
-            tiebreak_list = self.check_for_tiebreak()
+            tiebreak_list = self.tiebreak_player_list()
             if len(tiebreak_list) == 0:
                 self.end_tournament()
 
-        # TODO: Check if any player wants to quit, update tiebreak_list accordingly
+            self.match_order = self.generate_match_order(tiebreak_list)
+            self.active_players = len(tiebreak_list)
 
-        self.match_order = self.generate_match_order(tiebreak_list)
+        self.play_match()
 
-        # TODO: Start next match, pop match from match list
+
+    def play_match(self):
+        # TODO: check for colors
+        (player1, player2) = self.match_order.pop()
+        result = play_match(player1, player2)
+        if MatchResult.P1_WIN == result:
+            self.update_leaderboard(player1.player_id)
+        elif MatchResult.P2_WIN == result:
+            self.update_leaderboard(player2.player_id)
+        elif MatchResult.P1_QUIT == result:
+            self.player_quit(player1)
+            self.update_leaderboard(player2)
+        elif MatchResult.P2_QUIT == result:
+            self.player_quit(player2)
+            self.update_leaderboard(player1)
+
+        self.event_between_matches()
+
+    def player_quit(self, player):
+        # TODO: Check how many players are left, if only one: end tournament
+        if self.active_players == 2:
+            self.end_tournament()
+        
+        self.active_players -= 1
+        
+        player.active = False
+        for i, (player1, player2) in enumerate(self.match_order):
+            if player == player1:
+                del self.match_order[i]
+                self.update_leaderboard(player2)
+            if player == player2:
+                del self.match_order[i]
+                self.update_leaderboard(player1)
