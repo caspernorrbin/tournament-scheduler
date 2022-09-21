@@ -1,6 +1,6 @@
 import unittest
-from player import Player
-from tournament import Tournament
+from communication_platform.player import Player
+from communication_platform.tournament import Tournament
 
 
 class TestMatchOrder(unittest.TestCase):
@@ -35,5 +35,5 @@ class TestMatchOrder(unittest.TestCase):
             self.assertEqual(
                 len(match_list), number_of_players*(number_of_players-1)/2)
 
-
-unittest.main()
+if __name__ == '__main__':
+    unittest.main()

@@ -1,0 +1,15 @@
+.gitignore
+README.md
+pyproject.toml
+setup.cfg
+setup.py
+src/communication_platform/__init__.py
+src/communication_platform/game.py
+src/communication_platform/game_state.py
+src/communication_platform/match.py
+src/communication_platform/player.py
+src/communication_platform/tournament.py
+src/communication_platform.egg-info/PKG-INFO
+src/communication_platform.egg-info/SOURCES.txt
+src/communication_platform.egg-info/dependency_links.txt
+src/communication_platform.egg-info/top_level.txt

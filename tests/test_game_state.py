@@ -1,5 +1,5 @@
 import unittest as ut
-import game_state
+import communication_platform.game_state as game_state
 
 
 class BoardSizeBetween6x6And24x24(ut.TestCase):
