@@ -13,6 +13,7 @@ class Tournament:
     """
 
     def __init__(self):
+        self.active_players = 0
         self.player_list = []
         self.match_order = []
 
@@ -79,6 +80,7 @@ class Tournament:
         for i in range(answer):
             name = input(f"Please type in player {i+1}'s name! ")
             self.player_list.append(Player(name, i))
+        self.active_players = answer
 
     def begin_tournament(self):
         """
@@ -87,7 +89,6 @@ class Tournament:
         self.register_players()
         self.match_order = self.generate_match_order(self.player_list)
 
-        # TODO: Start the first match
         self.play_match()
 
     def end_tournament(self):
@@ -134,18 +135,16 @@ class Tournament:
 
     def player_quit(self, player):
         # TODO: Check how many players are left, if only one: end tournament
+        if self.active_players == 2:
+            self.end_tournament()
+        
+        self.active_players -= 1
+        
         player.active = False
-        for i, match in enumerate(self.match_order):
-            if player in match:
+        for i, (player1, player2) in enumerate(self.match_order):
+            if player == player1:
                 del self.match_order[i]
-
-
-
-
-
-
-
-
-
-
-
+                self.update_leaderboard(player2)
+            if player == player2:
+                del self.match_order[i]
+                self.update_leaderboard(player1)
