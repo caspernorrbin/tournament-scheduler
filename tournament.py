@@ -118,7 +118,11 @@ class Tournament:
 
 
     def play_match(self):
-        # TODO: check for colors
+        match_players = self.match_order.pop()
+        if match_players[0].whiteplays < match_players[1].whiteplays:
+            result = play_match(match_players[0], match_players[1])
+        else:
+            result = play_match(match_players[1], match_players[0])
         (player1, player2) = self.match_order.pop()
         result = play_match(player1, player2)
         if MatchResult.P1_WIN == result:
