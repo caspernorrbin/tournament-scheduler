@@ -1,5 +1,4 @@
-from tournament import Tournament, Player
-
+from tournament import Tournament
 
 def startmenu():
     print('''Welcome to the game!

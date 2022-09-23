@@ -16,5 +16,5 @@ def play_match(player1, player2):
     print("Playing match...")
     print("Player 1: " + player1.name)
     print("Player 2: " + player2.name)
-
-    return MatchResult.P1_WIN
+    choice = input("Who won? (1/2) quit(3/4): ")
+    return MatchResult(int(choice))

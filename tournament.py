@@ -1,6 +1,5 @@
 from random import shuffle
 from itertools import combinations
-
 from player import Player
 from match import MatchResult, play_match
 
@@ -81,6 +80,20 @@ class Tournament:
             name = input(f"Please type in player {i+1}'s name! ")
             self.player_list.append(Player(name, i))
         self.active_players = answer
+        
+    def select_player(self, players):
+        active = [player for player in players if player.active]
+        options = ["[Go back]", *active]
+        while True:
+            for i in range(len(options)):
+                print(f"{i+1}. {options[i]}")
+            selection = input("Selection: ")
+            if selection == "1":
+                return None
+            elif selection.isdigit() and int(selection) <= len(options) and int(selection) > 0:
+                return active[int(selection)-2]
+            else:
+                print("Invalid selection")
 
     def begin_tournament(self):
         """
@@ -93,6 +106,8 @@ class Tournament:
 
     def end_tournament(self):
         # TODO: Announce winner
+        print("Tournament ended")
+        self.leaderboard()
         quit()
 
 
@@ -104,8 +119,6 @@ class Tournament:
 
         self.leaderboard()
 
-        # TODO: Check if any player wants to quit
-
         if len(self.match_order) == 0:
             tiebreak_list = self.tiebreak_player_list()
             if len(tiebreak_list) == 0:
@@ -114,12 +127,27 @@ class Tournament:
             self.match_order = self.generate_match_order(tiebreak_list)
             self.active_players = len(tiebreak_list)
 
+        ## Prints the players of the upcoming match.
+        ## Creates a list of players who want to quit before the upcoming match.    
+        (player1, player2) = self.match_order[0]
+        while True:
+            print(f"Next match: {player1.name} vs {player2.name}")
+            print("1. Continue")
+            print("2. A player wants to quit")
+            selection = input("Selection: ")
+            if selection == "1":
+                break
+            elif selection == "2":
+                quitter = self.select_player(self.player_list)
+                if quitter != None:
+                    self.player_quit(quitter)
+        
         self.play_match()
 
 
     def play_match(self):
         # TODO: check for colors
-        (player1, player2) = self.match_order.pop()
+        (player1, player2) = self.match_order.pop(0)
         result = play_match(player1, player2)
         if MatchResult.P1_WIN == result:
             self.update_leaderboard(player1.player_id)
@@ -127,25 +155,27 @@ class Tournament:
             self.update_leaderboard(player2.player_id)
         elif MatchResult.P1_QUIT == result:
             self.player_quit(player1)
-            self.update_leaderboard(player2)
+            self.update_leaderboard(player2.player_id)
         elif MatchResult.P2_QUIT == result:
             self.player_quit(player2)
-            self.update_leaderboard(player1)
+            self.update_leaderboard(player1.player_id)
 
         self.event_between_matches()
 
     def player_quit(self, player):
-        # TODO: Check how many players are left, if only one: end tournament
-        if self.active_players == 2:
-            self.end_tournament()
-        
         self.active_players -= 1
-        
         player.active = False
+        
         for i, (player1, player2) in enumerate(self.match_order):
             if player == player1:
                 del self.match_order[i]
-                self.update_leaderboard(player2)
+                self.update_leaderboard(player2.player_id)
             if player == player2:
                 del self.match_order[i]
-                self.update_leaderboard(player1)
+                self.update_leaderboard(player1.player_id)
+        
+        if self.active_players == 1:
+            self.end_tournament()
+                
+        if len(self.match_order) == 0:
+            self.event_between_matches()
