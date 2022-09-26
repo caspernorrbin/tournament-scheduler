@@ -44,9 +44,14 @@ class Tournament:
         sorted = self.player_list.copy()
         sorted.sort(reverse=True)
 
-        tiebreak_list = []
+        active_players = []
         for player in sorted:
-            if player.score < sorted[0].score:
+            if player.active:
+                active_players.append(player)
+
+        tiebreak_list = []
+        for player in active_players:
+            if player.score < active_players[0].score:
                 break
             tiebreak_list.append(player)
         return tiebreak_list if len(tiebreak_list) > 1 else []
@@ -77,7 +82,10 @@ class Tournament:
 
         self.player_list = []
         for i in range(answer):
-            name = input(f"Please type in player {i+1}'s name! ")
+            while True:
+                name = input(f"Please type in player {i + 1}'s name! ")
+                if len(name) != 0:
+                    break
             self.player_list.append(Player(name, i))
         self.active_players = answer
         
@@ -108,6 +116,15 @@ class Tournament:
         # TODO: Announce winner
         print("Tournament ended")
         self.leaderboard()
+        sorted = self.player_list.copy()
+        sorted.sort(reverse=True)
+        for player in sorted:
+            if player.active:
+                winner = player
+                break
+
+        print(f"The winner is {winner.name}, congratulations!")
+
         quit()
 
 
@@ -129,8 +146,9 @@ class Tournament:
 
         ## Prints the players of the upcoming match.
         ## Creates a list of players who want to quit before the upcoming match.    
-        (player1, player2) = self.match_order[0]
+
         while True:
+            (player1, player2) = self.match_order[0]
             print(f"Next match: {player1.name} vs {player2.name}")
             print("1. Continue")
             print("2. A player wants to quit")
@@ -139,10 +157,11 @@ class Tournament:
                 break
             elif selection == "2":
                 quitter = self.select_player(self.player_list)
-                if quitter != None:
+                if quitter is not None:
                     self.player_quit(quitter)
         
         self.play_match()
+
 
 
     def play_match(self):
@@ -165,15 +184,17 @@ class Tournament:
     def player_quit(self, player):
         self.active_players -= 1
         player.active = False
-        
+
+        new_match_order = []
         for i, (player1, player2) in enumerate(self.match_order):
             if player == player1:
-                del self.match_order[i]
                 self.update_leaderboard(player2.player_id)
-            if player == player2:
-                del self.match_order[i]
+            elif player == player2:
                 self.update_leaderboard(player1.player_id)
-        
+            else:
+                new_match_order.append(self.match_order[i])
+        self.match_order = new_match_order
+
         if self.active_players == 1:
             self.end_tournament()
                 

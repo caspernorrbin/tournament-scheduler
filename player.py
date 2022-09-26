@@ -16,7 +16,10 @@ class Player:
     blackplays: int = field(default=0, init=False)
 
     def __str__(self):
-        return f"{self.name}: {self.score}"
+        if self.active:
+            return f"{self.name} : {self.score}"
+        else:
+            return f"{self.name} : {self.score} (player has quit)"
 
     def __lt__(self, other):
         return self.score < other.score
