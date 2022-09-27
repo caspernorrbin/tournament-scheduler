@@ -1,9 +1,20 @@
+from pickle import load, dump
 from dataclasses import dataclass
 from collections import defaultdict
 from enum import Enum
 
 MIN_BOARD_SIZE = 6
 MAX_BOARD_SIZE = 24
+
+FILE_NAME = 'game_state.pickle'
+
+def save_game_state(gamestate: object):
+    with open(FILE_NAME, "wb") as f:
+        dump(gamestate, f)
+
+def load_game_state() -> object:
+    with open(FILE_NAME, "rb") as f:
+        return load(f)
 
 
 class Orientation(Enum):
