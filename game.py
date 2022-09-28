@@ -4,9 +4,9 @@ from match import MatchResult, play_match
 
 def startmenu():
     print('''Welcome to the game!
-[S]tart game]
-[T]ournament]
-[Q]uit]''')
+[S]tart game
+[T]ournament
+[Q]uit''')
     choice = ""
     while choice not in ["S", "T", "Q"]:
         choice = input("Option: ").upper()
