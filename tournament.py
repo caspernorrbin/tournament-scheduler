@@ -20,10 +20,9 @@ class Tournament:
         """
         prints the leaderboard
         """
-        sorted = self.player_list.copy()
-        sorted.sort(reverse=True)
+        sorted_players = sorted(self.player_list, reverse=True)
         print("Leaderboard\n-----------------------")
-        for player in sorted:
+        for player in sorted_players:
             print(player)
 
     # NB: we don't know in what kind of format the game component outputs
@@ -41,19 +40,12 @@ class Tournament:
         check if there is a tiebreak
         :return: list of players with the same (highest) score if more than one player, else return empty list
         """
-        sorted = self.player_list.copy()
-        sorted.sort(reverse=True)
+        sorted_players = sorted(self.player_list, reverse=True)
 
-        active_players = []
-        for player in sorted:
-            if player.active:
-                active_players.append(player)
+        active_players = [player for player in sorted_players if player.active]
 
-        tiebreak_list = []
-        for player in active_players:
-            if player.score < active_players[0].score:
-                break
-            tiebreak_list.append(player)
+        tiebreak_list = [player for player in active_players if player.score == active_players[0].score]
+
         return tiebreak_list if len(tiebreak_list) > 1 else []
 
     def generate_match_order(self, players: list[Player]) -> MatchList:
@@ -113,12 +105,10 @@ class Tournament:
         self.play_match()
 
     def end_tournament(self):
-        # TODO: Announce winner
         print("Tournament ended")
         self.leaderboard()
-        sorted = self.player_list.copy()
-        sorted.sort(reverse=True)
-        for player in sorted:
+        sorted_players = sorted(self.player_list, reverse=True)
+        for player in sorted_players:
             if player.active:
                 winner = player
                 break
@@ -143,6 +133,7 @@ class Tournament:
 
             self.match_order = self.generate_match_order(tiebreak_list)
             self.active_players = len(tiebreak_list)
+            print("Scores are tied, tiebreaker started!")
 
         ## Prints the players of the upcoming match.
         ## Creates a list of players who want to quit before the upcoming match.    
