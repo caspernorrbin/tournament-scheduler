@@ -1,9 +1,20 @@
+from pickle import load, dump
 from dataclasses import dataclass
 from collections import defaultdict
 from enum import Enum
 
 MIN_BOARD_SIZE = 6
 MAX_BOARD_SIZE = 24
+
+FILE_NAME = 'game_state.pickle'
+
+def save_game_state(gamestate: object):
+    with open(FILE_NAME, "wb") as f:
+        dump(gamestate, f)
+
+def load_game_state() -> object:
+    with open(FILE_NAME, "rb") as f:
+        return load(f)
 
 
 class Orientation(Enum):
@@ -44,8 +55,7 @@ class Board:
                 f'Dimension of board is ({size},{size}) side length must be between {MIN_BOARD_SIZE} and {MAX_BOARD_SIZE}')
         
         self.size = size
-
-        self.board = defaultdict(default_factory=list)
+        self.board = defaultdict(list)
 
     @property
     def dimensions(self):
@@ -56,7 +66,7 @@ class Board:
         location = self.board[coordinate]
         
         # If the top piece is vertical we cannot place a piece there.
-        if location and location[0].orientation == Orientation.VERTICAL:
+        if location and location[-1].orientation == Orientation.VERTICAL:
             return
         
-        self.board[location].push(piece)
+        location.append(piece)
