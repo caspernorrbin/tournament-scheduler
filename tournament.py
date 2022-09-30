@@ -122,6 +122,7 @@ class Tournament:
         if white.whiteplays < black.whiteplays:
             white, black = black, white
         result = play_match(white, black)
+        white.whiteplays += 1
         if MatchResult.WHITE_WIN == result:
             self.update_leaderboard(white.player_id)
         elif MatchResult.BLACK_WIN == result:
