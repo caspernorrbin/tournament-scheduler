@@ -14,7 +14,7 @@ def play_match(player1, player2):
     :return: 
     """
     print("Playing match...")
-    print("White: " + player1.name)
-    print("Black: " + player2.name)
-
-    return MatchResult.WHITE_WIN
+    print("Player 1: " + player1.name)
+    print("Player 2: " + player2.name)
+    choice = input("Who won? (1/2) quit(3/4): ")
+    return MatchResult(int(choice))
