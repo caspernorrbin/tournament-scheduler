@@ -1,10 +1,10 @@
 from enum import Enum
 
 class MatchResult(Enum):
-    P1_WIN = 1
-    P2_WIN = 2
-    P1_QUIT = 3
-    P2_QUIT = 4
+    WHITE_WIN = 1
+    BLACK_WIN = 2
+    WHITE_QUIT = 3
+    BLACK_QUIT = 4
 
 def play_match(player1, player2):
     """
