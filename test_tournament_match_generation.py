@@ -35,5 +35,5 @@ class TestMatchOrder(unittest.TestCase):
             self.assertEqual(
                 len(match_list), number_of_players*(number_of_players-1)/2)
 
-
-unittest.main()
+if __name__ == '__main__':
+    unittest.main()
