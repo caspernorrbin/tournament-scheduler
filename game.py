@@ -22,7 +22,7 @@ def game():
 
     result = play_match(player1, player2)
 
-    if result == MatchResult.P1_WIN or result == MatchResult.P2_QUIT:
+    if result == MatchResult.WHITE_WIN or result == MatchResult.BLACK_QUIT:
         print(f"Congratulations {player1.name}!")
 
     else:
