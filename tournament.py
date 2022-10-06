@@ -21,7 +21,7 @@ class Tournament:
         prints the leaderboard
         """
         sorted_players = sorted(self.player_list, reverse=True)
-        print("Leaderboard\n-----------------------")
+        print("-----------------------\nLeaderboard\n-----------------------")
         for player in sorted_players:
             print(player)
 
