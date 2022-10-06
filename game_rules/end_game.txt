@@ -1,0 +1,5 @@
+The game ends if one of the following conditions are true:
+1. One of the players has no pieces, or:
+2. All the squares are occupied, or:
+3. One of the players has created a continuous path from left to right or from right to left.
+4. One of the players has created a continuous path from top to bottom or from bottom to top.

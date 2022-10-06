@@ -1,0 +1,4 @@
+A game is started in the following order:
+1. The black player puts a white piece somewhere on the board.
+2. The white player puts a black piece somewhere on the board.
+3. The black player makes their move.

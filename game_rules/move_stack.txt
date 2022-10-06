@@ -1,0 +1,4 @@
+A stack or sub-stack may be moved...
+* In one direction: up, down, left or right
+* If the uppermost piece is not standing and only if the user owns a piece in that stack.
+* If at least one of the pieces is owned by the player and a maximum of three steps. For every step, a piece must be put down from the stack under movement.

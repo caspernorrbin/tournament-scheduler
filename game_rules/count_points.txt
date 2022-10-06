@@ -1,0 +1,4 @@
+Counting points:
+The points are counted when no more new pieces can be put on the board.
+Points are given for the uppermost lying pieces owned by the player.
+The player own the pieces of its colours.

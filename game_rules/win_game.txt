@@ -1,0 +1,3 @@
+To win a game, one of the following must happen:
+1. One of the player has creates a path of their pieces connecting two sides, wither from left to right, right to left, to bottom or bottom to top.
+2. No path was created, but no more new pieces can be put on the board. The winner is the player owning the largest amount of the uppermost lying pieces.
