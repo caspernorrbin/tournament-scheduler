@@ -120,23 +120,27 @@ class Tournament:
         Handles events between matches. 
         Updates and prints leaderboard, checks for tiebreaks and generates new matches
         """
+        while True:
+            self.leaderboard()
+            
+            if len(self.match_order) == 0:
+                tiebreak_list = self.tiebreak_player_list()
+                if len(tiebreak_list) == 0:
+                    self.end_tournament()
+                    return
+                else:
+                    self.match_order = self.generate_match_order(tiebreak_list)
+                    self.active_players = len(tiebreak_list)
+                    print("Scores are tied, tiebreaker started!")
 
-        self.leaderboard()
+        
+            ## Prints the players of the upcoming match.
+            ## Creates a list of players who want to quit before the upcoming match.    
 
-        if len(self.match_order) == 0:
-            tiebreak_list = self.tiebreak_player_list()
-            if len(tiebreak_list) == 0:
+       
+            if self.active_players == 1:
                 self.end_tournament()
                 return
-
-            self.match_order = self.generate_match_order(tiebreak_list)
-            self.active_players = len(tiebreak_list)
-            print("Scores are tied, tiebreaker started!")
-
-        ## Prints the players of the upcoming match.
-        ## Creates a list of players who want to quit before the upcoming match.    
-
-        while True:
             (player1, player2) = self.match_order[0]
             print(f"Next match: {player1.name} vs {player2.name}")
             print("1. Continue")
@@ -188,9 +192,3 @@ class Tournament:
             else:
                 new_match_order.append(self.match_order[i])
         self.match_order = new_match_order
-
-        if self.active_players == 1:
-            self.end_tournament()
-                
-        if len(self.match_order) == 0:
-            self.event_between_matches()
