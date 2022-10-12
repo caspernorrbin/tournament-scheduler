@@ -1,4 +1,4 @@
-from random import shuffle
+from random import shuffle, getrandbits
 from itertools import combinations
 from player import Player
 from match import MatchResult, play_match
@@ -80,7 +80,7 @@ class Tournament:
                     break
             self.player_list.append(Player(name, i))
         self.active_players = answer
-        
+
     def select_player(self, players):
         active = [player for player in players if player.active]
         options = ["[Go back]", *active]
@@ -102,11 +102,10 @@ class Tournament:
         self.register_players()
         self.match_order = self.generate_match_order(self.player_list)
 
-        self.play_match()
+        self.match_logic()
 
     def end_tournament(self):
         print("Tournament ended")
-        self.leaderboard()
         sorted_players = sorted(self.player_list, reverse=True)
         for player in sorted_players:
             if player.active:
@@ -115,30 +114,30 @@ class Tournament:
 
         print(f"The winner is {winner.name}, congratulations!")
 
-        quit()
-
-
     def event_between_matches(self):
         """
         Handles events between matches. 
         Updates and prints leaderboard, checks for tiebreaks and generates new matches
         """
-
-        self.leaderboard()
-
-        if len(self.match_order) == 0:
-            tiebreak_list = self.tiebreak_player_list()
-            if len(tiebreak_list) == 0:
-                self.end_tournament()
-
-            self.match_order = self.generate_match_order(tiebreak_list)
-            self.active_players = len(tiebreak_list)
-            print("Scores are tied, tiebreaker started!")
-
-        ## Prints the players of the upcoming match.
-        ## Creates a list of players who want to quit before the upcoming match.    
-
         while True:
+            self.leaderboard()
+
+            if len(self.match_order) == 0:
+                tiebreak_list = self.tiebreak_player_list()
+                if len(tiebreak_list) == 0:
+                    self.end_tournament()
+                    return
+                else:
+                    self.match_order = self.generate_match_order(tiebreak_list)
+                    self.active_players = len(tiebreak_list)
+                    print("Scores are tied, tiebreaker started!")
+
+            # Prints the players of the upcoming match.
+            # Creates a list of players who want to quit before the upcoming match.
+
+            if self.active_players == 1:
+                self.end_tournament()
+                return
             (player1, player2) = self.match_order[0]
             print(f"Next match: {player1.name} vs {player2.name}")
             print("1. Continue")
@@ -150,15 +149,16 @@ class Tournament:
                 quitter = self.select_player(self.player_list)
                 if quitter is not None:
                     self.player_quit(quitter)
-        
-        self.play_match()
 
+        self.match_logic()
 
-
-    def play_match(self):
-        (white, black) = self.match_order.pop()
-        if white.whiteplays < black.whiteplays:
+    def match_logic(self):
+        (white, black) = self.match_order.pop(0)
+        if white.whiteplays > black.whiteplays:
             white, black = black, white
+        elif white.whiteplays == black.whiteplays:
+            if getrandbits(1):
+                white, black = black, white
         result = play_match(white, black)
         white.whiteplays += 1
         black.blackplays += 1
@@ -168,10 +168,10 @@ class Tournament:
             self.update_leaderboard(black.player_id)
         elif MatchResult.WHITE_QUIT == result:
             self.player_quit(white)
-            self.update_leaderboard(black)
+            self.update_leaderboard(black.player_id)
         elif MatchResult.BLACK_QUIT == result:
             self.player_quit(black)
-            self.update_leaderboard(white)
+            self.update_leaderboard(white.player_id)
 
         self.event_between_matches()
 
@@ -188,9 +188,3 @@ class Tournament:
             else:
                 new_match_order.append(self.match_order[i])
         self.match_order = new_match_order
-
-        if self.active_players == 1:
-            self.end_tournament()
-                
-        if len(self.match_order) == 0:
-            self.event_between_matches()
