@@ -6,7 +6,7 @@ class MatchResult(Enum):
     WHITE_QUIT = 3
     BLACK_QUIT = 4
 
-def play_match(player1, player2):
+def play_match(white, black):
     """
     Simulates a match between two players
     :param player1: the first player
@@ -14,7 +14,8 @@ def play_match(player1, player2):
     :return: 
     """
     print("Playing match...")
-    print("White: " + player1.name)
-    print("Black: " + player2.name)
+    print("White: " + white.name)
+    print("Black: " + black.name)
+    # Quit means quitting the tournament, not the match
     choice = input("Who won? (1/2) quit(3/4): ")
     return MatchResult(int(choice))
