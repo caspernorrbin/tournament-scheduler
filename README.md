@@ -1,5 +1,5 @@
-# Communication Platform - Group J
-This project implements a communication platform for a UU-Game. The functionality includes:
+# Tournament Scheduler and Communication Platform
+This project implements a communication platform for a nondescript game. The functionality includes:
 - Scheduling a single match
 - Scheduling a round robin tournament between multiple players
 - Saving and loading the state of individual match
