@@ -120,7 +120,7 @@ def players_to_str(player1: Player, player2: Player):
 
 def game_state_to_str(game_state: GameState):
     '''Show the current game state.
-    
+
     Parameters: a game state
     Returns: game state as string'''
     game_state_str = ''
@@ -130,10 +130,18 @@ def game_state_to_str(game_state: GameState):
 
     return game_state_str
 
+
 def print_game_state(game_state: GameState):
     '''Clear terminal and print the game state.
-    
+
     Parameters: a game state'''
     os.system('cls' if os.name == 'nt' else 'clear')
     print(game_state_to_str(game_state))
-    
+
+
+def stack_to_str(game_state: GameState, square: int):
+    stack = game_state.board.state[square]
+    if not stack:
+        return None
+    stack = list(map(str, stack))
+    return stack

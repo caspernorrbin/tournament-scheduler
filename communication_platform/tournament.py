@@ -44,7 +44,8 @@ class Tournament:
 
         active_players = [player for player in sorted_players if player.active]
 
-        tiebreak_list = [player for player in active_players if player.score == active_players[0].score]
+        tiebreak_list = [
+            player for player in active_players if player.score == active_players[0].score]
 
         return tiebreak_list if len(tiebreak_list) > 1 else []
 
@@ -80,7 +81,7 @@ class Tournament:
                     break
             self.player_list.append(Player(name, i))
         self.active_players = answer
-        
+
     def select_player(self, players):
         active = [player for player in players if player.active]
         options = ["[Go back]", *active]
@@ -114,7 +115,6 @@ class Tournament:
 
         print(f"The winner is {winner.name}, congratulations!")
 
-
     def event_between_matches(self):
         """
         Handles events between matches. 
@@ -122,7 +122,7 @@ class Tournament:
         """
         while True:
             self.leaderboard()
-            
+
             if len(self.match_order) == 0:
                 tiebreak_list = self.tiebreak_player_list()
                 if len(tiebreak_list) == 0:
@@ -133,11 +133,9 @@ class Tournament:
                     self.active_players = len(tiebreak_list)
                     print("Scores are tied, tiebreaker started!")
 
-        
-            ## Prints the players of the upcoming match.
-            ## Creates a list of players who want to quit before the upcoming match.    
+            # Prints the players of the upcoming match.
+            # Creates a list of players who want to quit before the upcoming match.
 
-       
             if self.active_players == 1:
                 self.end_tournament()
                 return
@@ -152,9 +150,8 @@ class Tournament:
                 quitter = self.select_player(self.player_list)
                 if quitter is not None:
                     self.player_quit(quitter)
-        
-        self.play_match()
 
+        self.play_match()
 
     def play_match(self):
         (white, black) = self.match_order.pop(0)

@@ -1,8 +1,10 @@
 import unittest
+
+from numpy import square
 import __init__
 import random
 from classes import Piece, Player, GameState
-from board_functions import contains_standing_piece, is_board_full, count_all_pieces, count_topmost_lying_pieces, is_stack_moveable, is_colour_in_square, convert_input_to_square, is_destination_valid
+from board_functions import contains_standing_piece, convert_input_to_coord, is_board_full, count_all_pieces, count_topmost_lying_pieces, is_stack_moveable, is_colour_in_square, convert_input_to_square, is_destination_valid
 
 
 class BoardTestCase(unittest.TestCase):
@@ -114,9 +116,9 @@ class BoardTestCase(unittest.TestCase):
         self.game_state.board.state[square].append(Piece('black', False))
         self.assertTrue(is_stack_moveable(self.game_state, square))
 
-        '''Then test when one piece is standing - should not be moveable'''
+        '''Then test when one piece is standing - should be moveable'''
         self.game_state.board.state[square].append(Piece('black', True))
-        self.assertFalse(is_stack_moveable(self.game_state, square))
+        self.assertTrue(is_stack_moveable(self.game_state, square))
 
     def test_is_destination_valid(self):
         board = self.game_state.board
@@ -152,6 +154,14 @@ class BoardTestCase(unittest.TestCase):
         square = convert_input_to_square(3, 2)
         self.assertTrue(square == 10)
 
+    def test_convert_input_to_coord(self):
+        squares = []
+        for i in range(1, 17):
+            y, x = convert_input_to_coord(i)
+            squares.append((y, x))
+
+        correct_squares = [(1, 1), (1, 2), (1, 3), (1, 4), (2, 1), (2, 2), (2, 3), (2, 4), (3, 1), (3, 2), (3, 3), (3, 4), (4, 1), (4, 2), (4, 3), (4, 4)]
+        self.assertEqual(squares, correct_squares)
 
 if __name__ == '__main__':
     unittest.main()

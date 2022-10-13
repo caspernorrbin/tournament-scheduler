@@ -56,7 +56,7 @@ def is_stack_moveable(game_state: GameState, square_to_check):
 
     Parameters: a game state and the square to check for moveable stack
     Returns: True if the stack is moveable, False if not'''
-    return not contains_standing_piece(game_state.board, square_to_check) and is_colour_in_square(game_state.board, square_to_check, game_state.current_player.colour)
+    return is_colour_in_square(game_state.board, square_to_check, game_state.current_player.colour)
 
 
 def contains_standing_piece(board, square_to_check):
@@ -96,12 +96,42 @@ def convert_input_to_square(row, col):
     return int(chosen_square)
 
 
-def is_destination_valid(board, row, col):
-    ''' Check if input from user is a valid destination
+def convert_input_to_coord(square):
+    '''Converts input in the form of square (1-16) to the correlating rows and columns
 
-    Parameters: a game board, a row, a column and a position for a pice (L for laying, S for standing)
+    Parameters: square (1-16)
+    Returns: row and column of the given square
+    '''
+    row = (square - 1) // 4 + 1
+    col = (square - 1) % 4 + 1
+    return row, col
+
+
+def is_destination_valid(board, row, col):
+    '''Check if input from user is a valid destination (for placing a piece)
+
+    Parameters: a game board, a row, a column and a position for a piece (L for laying, S for standing)
     Returns: True if the destination is valid, 
     False, "Can not place piece on another standing piece" if the destination has a standing piece on it
+    False, "Not a valid row/column/position" if the row/column/position is invalid. '''
+    if not valid_coordinate('Useless', row, col)[0]:
+        return False, "Invalid coordinate."
+    else:
+        chosen_square = convert_input_to_square(row, col)
+        piece_standing = contains_standing_piece(board, chosen_square)
+
+        if piece_standing:
+            return False, "Invalid move, there is a standing piece on the square"
+
+        else:
+            return True, "OK"
+
+
+def valid_coordinate(_, row, col):
+    ''' Check if input from user is a valid destination (for moving a stack)
+
+    Parameters: a row, a column and a position for a piece (L for laying, S for standing)
+    Returns: True if the destination is valid,
     False, "Not a valid row/column/position" if the row/column/position is invalid. '''
     if (0 > row or row > 4) and (0 > col or col > 4):
         return False, "row {} and column {} are not valid".format(row, col)
@@ -110,11 +140,4 @@ def is_destination_valid(board, row, col):
     elif 0 > col or col > 4:
         return False, "column {} is not a valid column".format(col)
     else:
-        chosen_square = convert_input_to_square(row, col)
-        piece_standing = contains_standing_piece(board, chosen_square)
-
-        if piece_standing:
-            return False, "Invalind move, there is a stanging piece on the square"
-
-        else:
-            return True, "OK"
+        return True, "OK"

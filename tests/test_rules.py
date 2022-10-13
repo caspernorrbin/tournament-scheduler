@@ -291,12 +291,12 @@ class GameRulesTestCase(unittest.TestCase):
 
         # start from start_pos+4 which has a standing piece on it..
         start_pos_plus_4 = start_pos+4
-        self.assertFalse(check_if_stack_can_move(
+        self.assertTrue(check_if_stack_can_move(
             self.game_state, start_pos_plus_4, end_pos15))
-        self.assertFalse(check_if_stack_can_move(
+        self.assertTrue(check_if_stack_can_move(
             self.game_state, start_pos_plus_4, end_pos11))
         # horizontal also:
-        self.assertFalse(check_if_stack_can_move(
+        self.assertTrue(check_if_stack_can_move(
             self.game_state, start_pos_plus_4, end_pos5))
 
         # start from new square

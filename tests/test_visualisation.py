@@ -3,7 +3,7 @@ import __init__
 import random
 
 from classes import GameState, Piece
-from visualisation import board_to_str, game_state_to_str, players_to_str
+from visualisation import board_to_str, game_state_to_str, players_to_str, stack_to_str
 
 
 class VisualisationTestCase(unittest.TestCase):
@@ -13,6 +13,8 @@ class VisualisationTestCase(unittest.TestCase):
         '''Create a board before running tests (is run before every test)'''
         random.seed(42)
         self.game_state = GameState()
+        self.game_state.player_1.name = 'Player 1:'
+        self.game_state.player_2.name = 'Player 2:'
         self.maxDiff = None
 
     def test_show_empty_board(self):
@@ -86,8 +88,8 @@ class VisualisationTestCase(unittest.TestCase):
                          'The board with one piece is not converted to string properly.')
 
     def test_show_players(self):
-        correct_str = '''Player 1                 Player 2: 
-Colour: black            Colour: white
+        correct_str = '''Player 1:                Player 2:
+Colour: white            Colour: black
 Pieces remaining: 15     Pieces remaining: 15
 '''
         self.assertEqual(players_to_str(self.game_state.player_1,
@@ -112,11 +114,20 @@ Pieces remaining: 15     Pieces remaining: 15
 |          |          |          |          |
 +----------+----------+----------+----------+
 
-Player 1                 Player 2: 
-Colour: black            Colour: white
+Player 1:                Player 2:
+Colour: white            Colour: black
 Pieces remaining: 15     Pieces remaining: 15
 '''
         self.assertEqual(game_state_to_str(self.game_state), correct_string)
+
+    def test_show_stack(self):
+        square = 1
+        correct_str = ['Lying black piece', 'Lying white piece', 'Lying black piece']
+        self.game_state.board.state[square].append(Piece('black', False))
+        self.game_state.board.state[square].append(Piece('white', False))
+        self.game_state.board.state[square].append(Piece('black', False))
+
+        self.assertEqual(stack_to_str(self.game_state, square), correct_str)
 
 
 if __name__ == '__main__':

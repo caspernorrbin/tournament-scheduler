@@ -32,7 +32,7 @@ def print_rules():
 
 def print_toolbar():
     ''' Prints the toolbar to terminal '''
-    print("[P]lace a piece\n[M]ove a stack\n[R]ead the rules\n[Q]uit (resign)")
+    print("[P]lace a piece\n[M]ove a stack\n[D]isplay stack\n[R]ead the rules\n[Q]uit (resign)")
     print("=================\n> ", end="")
 
 def print_main_menu():

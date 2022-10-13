@@ -3,8 +3,8 @@ import os
 from classes import GameState
 from rules_functions import check_if_stack_can_move, determine_winner, can_place_piece, alternate_players, place_piece, check_for_connections, move_stack
 from menus import print_rules, print_toolbar
-from board_functions import convert_input_to_square, is_destination_valid, is_stack_moveable
-from visualisation import print_game_state
+from board_functions import convert_input_to_coord, convert_input_to_square, is_destination_valid, is_stack_moveable, valid_coordinate
+from visualisation import print_game_state, stack_to_str
 
 
 def start_game(name1, name2):
@@ -22,7 +22,7 @@ def toolbar_answer():
     while True:
         print_toolbar()
         answer = input().lower()
-        if answer == "p" or answer == "m" or answer == "r" or answer == "q":
+        if answer == "p" or answer == "m" or answer == "d" or answer == "r" or answer == "q":
             return answer
         else:
             print('Invalid input. Press enter to try again, \'R/r\' to return')
@@ -33,7 +33,7 @@ def toolbar_answer():
                 continue
 
 
-def choose_coordinate(board, str):
+def choose_coordinate(board, str, validation_func):
     ''' Will receive input from terminal and will only return if input is a number between 0-15
         otherwise it will loops until valid input is read 
 
@@ -55,7 +55,7 @@ def choose_coordinate(board, str):
             else:
                 continue
 
-        valid, msg = is_destination_valid(board, row, col)
+        valid, msg = validation_func(board, row, col)
         if valid:
             square = convert_input_to_square(row, col)
             return square
@@ -75,7 +75,7 @@ def put_piece(state_of_game: GameState):
     standing = False
 
     while True:
-        square = choose_coordinate(state_of_game.board, "Place a piece.")
+        square = choose_coordinate(state_of_game.board, "Place a piece.", is_destination_valid)
         if square is not None:
             print(
                 "Place the piece [s]tanding or [l]ying down? (Default: lying down)\n> ", end="")
@@ -107,7 +107,7 @@ def move_a_stack(state_of_game: GameState):
     '''
     while True:
         start = choose_coordinate(
-            state_of_game.board, "Which stack do you want to move?")
+            state_of_game.board, "Which stack do you want to move?", valid_coordinate)
         if start is None:
             break
 
@@ -121,7 +121,7 @@ def move_a_stack(state_of_game: GameState):
                 continue
         else:
             end = choose_coordinate(
-                state_of_game.board, "Where to place the stack.")
+                state_of_game.board, "Where to place the stack.", valid_coordinate)
             if end is None:
                 break
             if not check_if_stack_can_move(state_of_game, start, end):
@@ -162,6 +162,31 @@ def move_a_stack(state_of_game: GameState):
                         inp = input().lower()
                         if inp == 'r':
                             break
+            break
+
+
+def print_stack(state_of_game: GameState):
+    '''Print the pieces in a stack on a given square
+
+    Parameters: state_of_game is the internal representation of the game state
+                square is the given square
+    '''
+    question = 'What stack do you want to display?'
+    while True:
+        square = choose_coordinate(state_of_game.board, question, valid_coordinate)
+        stack_str = stack_to_str(state_of_game, square)
+        if stack_str is None:
+            print('Stack is empty. Press enter to try again, \'R/r\' to return.')
+            inp = input().lower()
+            if inp == 'r':
+                break
+        else:
+            y, x = convert_input_to_coord(square)
+            print(f'Stack at {y} {x} (top to bottom):')
+            stack_str.reverse()
+            [print(piece) for piece in stack_str]
+            print()
+            input('Press enter to return.')
             break
 
 
@@ -211,6 +236,8 @@ def game_loop(state_of_game: GameState):
             put_piece(state_of_game)
         elif answer == "m":
             move_a_stack(state_of_game)
+        elif answer == "d":
+            print_stack(state_of_game)
         elif answer == "r":
             print_rules()
         else:

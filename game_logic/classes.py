@@ -16,6 +16,11 @@ class Piece:
     def __eq__(self, __o: object) -> bool:
         return self.colour == __o.colour and self.standing == __o.standing
 
+    def __str__(self):
+        if self.standing:
+            return f'Standing {self.colour} piece'
+        return f'Lying {self.colour} piece'
+
 
 # The definition of a player of the game. The player plays as colour 'black' or 'white'
 # A player has a max amount of 15 pieces (the starting amount of pieces is 15).
@@ -23,7 +28,7 @@ class Piece:
 # is ('black' or 'white')
 @dataclass
 class Player:
-    def __init__(self, colour, pieces, name):
+    def __init__(self, colour, pieces, name = ''):
         self.colour = colour
         self.pieces = pieces
         self.name = name
