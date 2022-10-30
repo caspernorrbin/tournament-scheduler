@@ -23,4 +23,4 @@ This was the component that we ourselves implemented, its code resides in the `c
 `python -m unittest` runs all tests, alternatively, each test file can be run individually to test specific functionality.
 
 ## Running instructions
-The main program can be run from `main.py`. To start  the program, run `python game.py`
+The main program can be run from `main.py`. To start  the program, run `python main.py`
